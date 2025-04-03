@@ -1,29 +1,46 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const mongoose = require("mongoose");
-const authRoutes = require("./routes/auth");
+const connectDB = require("./config/db");
+const authRoutes = require("./routes/authRoutes"); // Corrected import
+const protectedRoutes = require("./routes/protected");
+const eventRoutes = require("./routes/eventRoutes");
+const guestRoutes = require("./routes/guestRoutes");
+require("dotenv").config();
 
-app.use("/api/auth", authRoutes);
 
+
+// Load environment variables
 dotenv.config();
+
+// Initialize Express app
 const app = express();
+
+// Connect to MongoDB
+connectDB();
 
 // Middleware
 app.use(express.json());
 app.use(cors());
 
-// Database Connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.log("❌ MongoDB Connection Failed:", err));
+// Routes
+app.use("/api/auth", authRoutes);
 
-// Sample Route
+// Root Route
 app.get("/", (req, res) => {
     res.send("Welcome to Guest Management System API");
 });
+
+app.use("/api/protected", protectedRoutes);
+
+// event routes
+app.use("/api/events", eventRoutes);
+
+//guest invite 
+app.use("/api/guests", guestRoutes);
+
+
+
 
 // Start Server
 const PORT = process.env.PORT || 5000;
