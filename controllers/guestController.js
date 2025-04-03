@@ -19,6 +19,11 @@ exports.inviteGuest = async (req, res) => {
         const guest = new Guest({ event: eventId, email });
         await guest.save();
 
+        
+        // 🔥 Add guest ID to the event's guests array
+        event.guests.push(guest._id);
+        await event.save();
+
         // Send Email Invitation
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
@@ -30,7 +35,7 @@ exports.inviteGuest = async (req, res) => {
             }
         });
         
-        const invitationLink = `http://localhost:3000/rsvp/${guest._id}`;
+        const invitationLink = `http://localhost:5173/rsvp/${guest._id}`;
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,

@@ -29,7 +29,8 @@ exports.createEvent = async (req, res) => {
 // **Get All Events for Logged-in User**
 exports.getEvents = async (req, res) => {
     try {
-        const events = await Event.find({ user: req.user.id });
+        // const events = await Event.find({ user: req.user.id });
+        const events = await Event.find({ user: req.user.id }).populate("guests");
         res.json(events);
     } catch (error) {
         res.status(500).json({ message: "Server Error" });
