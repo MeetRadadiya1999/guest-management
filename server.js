@@ -40,7 +40,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/guests", guestRoutes);
 
 
-app.use(cors({ origin: "https://guest-management-frontend.vercel.app", credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
 
 // Start Server

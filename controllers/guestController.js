@@ -28,42 +28,46 @@ exports.inviteGuest = async (req, res) => {
 
         // Send Email Invitation
         const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true, // Use TLS
+            host: process.env.EMAIL_HOST,
+            port: process.env.EMAIL_PORT,
+            secure: false,
             auth: {
-                user: process.env.EMAIL,
-                pass: process.env.EMAIL_PASSWORD
+                user: process.env.EMAIL_USER, // Corrected
+                pass: process.env.EMAIL_PASSWORD // Corrected
             }
         });
+        
 
         // Create invitation link
-        const invitationLink = `https://guest-management-frontend.vercel.app/rsvp/${guest._id}`;
+        const invitationLink = `${process.env.FRONTEND_URL}/rsvp/${guest._id}`;
         // const invitationLink = `http://localhost:5173/rsvp/${guest._id}`; // Vite
 
         // 📨 Email message including event details and inviter's name
         const mailOptions = {
-            from: process.env.EMAIL,
+            from: `"${event.user.name}" <${process.env.EMAIL_USER}>`, // Your verified email
+            replyTo: event.user.email, // If the guest replies, it goes to the inviter
             to: email,
             subject: `You're Invited: ${event.name}`,
             text: `Hello,
-
-                You are invited to *${event.name}* 🎉 by *${event.user.name}*.
-
-                📅 Date: ${event.date}
-                ⏰ Time: ${event.time}
-                📍 Location: ${event.location}
-
-                Please click the link below to RSVP:
-                🔗 ${invitationLink}
-
-                If you have any questions, feel free to contact *${event.user.name}* at ${event.user.email}.
-
-                Looking forward to seeing you there!
-
-                Best,
-                The Event Team`
+        
+            You are invited to *${event.name}* 🎉 by *${event.user.name}*.
+        
+            📅 Date: ${event.date}
+            ⏰ Time: ${event.time}
+            📍 Location: ${event.location}
+        
+            Please click the link below to RSVP:
+            🔗 ${invitationLink}
+        
+            If you have any questions, feel free to contact *${event.user.name}* at ${event.user.email}.
+        
+            Looking forward to seeing you there!
+        
+            Best,
+            The Event Team`
         };
+        
+
 
         await transporter.sendMail(mailOptions);
 
