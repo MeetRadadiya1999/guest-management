@@ -1,5 +1,5 @@
 const express = require("express");
-const { inviteGuest, respondToInvitation } = require("../controllers/guestController");
+const { inviteGuest, respondToInvitation, getGuestDetails } = require("../controllers/guestController");
 const authMiddleware = require("../middleware/authMiddleware");
 const Guest = require("../models/Guest");
 
@@ -11,15 +11,7 @@ router.post("/invite/:eventId", authMiddleware, inviteGuest);
 // Respond to RSVP (Guest clicks the link)
 router.post("/rsvp/:guestId", respondToInvitation);
 
-router.get("/:eventId", authMiddleware, async (req, res) => {
-    try {
-        const guests = await Guest.find({ event: req.params.eventId });
-        res.json(guests);
-    } catch (error) {
-        console.log("❌ Error:", error);
-        res.status(500).json({ message: "Server Error" });
-    }
-});
+router.get("/:guestId", getGuestDetails);
 
 
 module.exports = router;
