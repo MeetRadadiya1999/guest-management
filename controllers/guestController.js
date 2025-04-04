@@ -35,7 +35,8 @@ exports.inviteGuest = async (req, res) => {
             }
         });
         
-        const invitationLink = `http://localhost:5173/rsvp/${guest._id}`;
+        // const invitationLink = `http://localhost:5173/rsvp/${guest._id}`;
+        const invitationLink = `https://guest-management-frontend.vercel.app/rsvp/${guest._id}`;
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,

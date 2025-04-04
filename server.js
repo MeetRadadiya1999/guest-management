@@ -39,7 +39,8 @@ app.use("/api/events", eventRoutes);
 //guest invite 
 app.use("/api/guests", guestRoutes);
 
-
+const cors = require("cors");
+app.use(cors({ origin: "https://guest-management-frontend.vercel.app", credentials: true }));
 
 
 // Start Server
