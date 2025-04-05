@@ -40,8 +40,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/guests", guestRoutes);
 
 
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
-
+app.use(cors({ origin: process.env.FRONTEND_URL , credentials: true }));
 
 // Start Server
 const PORT = process.env.PORT || 5000;
